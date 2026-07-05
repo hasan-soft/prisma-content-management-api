@@ -79,6 +79,7 @@ const updateMyProfileInDB = async (userId: string, payload: any) => {
       profile: true,
     },
   });
+  return updatedUser;
 };
 
 export const userService = {
