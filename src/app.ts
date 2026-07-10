@@ -1,14 +1,19 @@
 import cookieParser from "cookie-parser";
-import express, { Application, Request, Response } from "express";
+import express, {
+  Application,
+  NextFunction,
+  Request,
+  Response,
+} from "express";
 import cors from "cors";
 import config from "./config";
-import { prisma } from "./lib/prisma";
 import httpStatus from "http-status";
-import bcrypt from "bcryptjs";
 import { userRoutes } from "./modules/user/user.route";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { postRoutes } from "./modules/post/post.route";
 import { commentRoutes } from "./modules/comment/comment.route";
+import { notFound } from "./middlewares/notFound";
+import { globalAErrorHandler } from "./middlewares/globalErrorHandler";
 
 const app: Application = express();
 
@@ -29,10 +34,13 @@ app.get("/", (req: Request, res: Response) => {
 
 // app.post()
 
-
-app.use("/api/users", userRoutes)
-app.use("/api/auth",authRoutes)
-app.use("/api/posts", postRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+
+app.use(notFound);
+
+app.use(globalAErrorHandler)
 
 export default app;
